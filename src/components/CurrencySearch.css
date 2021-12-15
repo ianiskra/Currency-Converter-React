@@ -1,0 +1,14 @@
+.currency-container{
+    width: 70vw;
+    margin: 0 auto;
+    background-color: #0487FF;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.currency-search{
+    min-height: 30vh;
+    min-width: 20vw;
+    background-color: #C4C4C4;
+}
