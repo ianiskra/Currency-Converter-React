@@ -3,12 +3,12 @@ import { Country } from './Country';
 import './CurrencySearch.css';
 import { currencyList } from '../utils/currencyList';
 import { nationList } from '../utils/countryList';
-import aud from '../flags/aud.png';
-import bdt from '../flags/bdt.png';
-import bif from '../flags/bif.png';
-import etb from '../flags/etb.png';
-import ils from '../flags/ils.png';
-import mdl from '../flags/mdl.png';
+// import aud from '../flags/aud.png';
+// import bdt from '../flags/bdt.png';
+// import bif from '../flags/bif.png';
+// import etb from '../flags/etb.png';
+// import ils from '../flags/ils.png';
+// import mdl from '../flags/mdl.png';
 
 // const nationArray = []
 // currencyList.map((currency) => {
@@ -23,15 +23,15 @@ import mdl from '../flags/mdl.png';
 
 const countryArray = [
     {
-        countryImg: aud,
+        countryImg: "aud",
         nation: "AUD"
     },
     {
-        countryImg: bdt,
+        countryImg: "bdt",
         nation: "BDT"
     },
     {
-        countryImg: bif,
+        countryImg: "bif",
         nation: "BIF"
     }
 ]
@@ -41,14 +41,9 @@ export const CurrencySearch = () => {
     const [currency, setCurrency] = useState({});
     const [country, setCountry] = useState("");
     const [conversionRate, setConversionRate] = useState(1);
-    const [selectedCountries, setSelectedCountries] = useState({
-        AUD: "",
-        BDT: "",
-        BIF: "",
-        ETB: "",
-        ILS: "",
-        MDL: "",
-    });
+    const [selectedCountries, setSelectedCountries] = useState([]);
+    const [localCountries, setLocalCountries] = useState([])
+
 
     const fetchCurrency = async (country) => {
         let url = `https://freecurrencyapi.net/api/v2/latest?base_currency=${country}&apikey=${process.env.REACT_APP_FREECURRAPI}`;
@@ -56,21 +51,56 @@ export const CurrencySearch = () => {
         let response = await currencyFetch.json();
         console.log('currency', response.data);
 
-        setSelectedCountries({
-            AUD: parseFloat(response.data.AUD).toFixed(2) * parseFloat(conversionRate),
-            BDT: parseFloat(response.data.BDT).toFixed(2) * parseFloat(conversionRate),
-            BIF: parseFloat(response.data.BIF).toFixed(2) * parseFloat(conversionRate),
-            ETB: parseFloat(response.data.ETB).toFixed(2) * parseFloat(conversionRate),
-            ILS: parseFloat(response.data.ILS).toFixed(2) * parseFloat(conversionRate),
-            MDL: parseFloat(response.data.MDL).toFixed(2) * parseFloat(conversionRate),
-        });
+        setSelectedCountries([
+            {
+                presentCountry: 'AUD',
+                currencyResult: parseFloat(response.data.AUD).toFixed(2) * parseFloat(conversionRate)
+            },
+            { 
+                presentCountry: 'BDT',
+                currencyResult: parseFloat(response.data.BDT).toFixed(2) * parseFloat(conversionRate) 
+            },
+            {
+                presentCountry: 'BIF',
+                currencyResult: parseFloat(response.data.BIF).toFixed(2) * parseFloat(conversionRate) 
+            },
+            {
+                presentCountry: 'ETB',
+                currencyResult: parseFloat(response.data.ETB).toFixed(2) * parseFloat(conversionRate) 
+            },
+            {
+                presentCountry: 'ILS',
+                currencyResult: parseFloat(response.data.ILS).toFixed(2) * parseFloat(conversionRate) 
+            },
+            {
+                presentCountry: 'MDL',
+                currencyResult: parseFloat(response.data.MDL).toFixed(2) * parseFloat(conversionRate) 
+            },
+        ]);
         setCurrency(response.data);
         return response.data;
     }
 
+    // Run after display items mount
+    useEffect(() => {
+        if (localStorage.getItem("countries")) {
+            let localCTstore = JSON.parse(localStorage.getItem('countries'));
+            setLocalCountries(localCTstore);
+            fetchCurrency('USD');
+        }
+        else {
+            localStorage.setItem('countries', JSON.stringify(countryArray));
+            // setSelectedCountries(countryArray);
+            fetchCurrency('USD');
+        }
+    }, [])
+
     useEffect(() => {
         // comparing a country with other countries
-        fetchCurrency(country);
+        if (country !== null) {
+            fetchCurrency(country);
+        }
+
     }, [country, conversionRate])
 
     const addCurrency = (e) => {
@@ -106,19 +136,19 @@ export const CurrencySearch = () => {
                 </div>
 
                 <div className="currency-search">
-                    {countryArray.map((elem) => {
+                    {selectedCountries.map((elem) => {
                         return (
                             <Country
-                                country={elem.nation}
-                                countrycode={elem.countryImg}
-                                selectedCountries={selectedCountries}
+                                country={elem.presentCountry}
+                                countrycode={elem.presentCountry.toLowerCase()}
+                                currencyValue={elem.currencyResult}
                             />
                         )
                     })}
 
                     <select>
                         {nationList.map((ele) => {
-                            return(
+                            return (
                                 <option value={ele.country}>{ele.country}</option>
                             )
                         })}
