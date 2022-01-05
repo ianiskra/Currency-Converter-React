@@ -42,41 +42,28 @@ export const CurrencySearch = () => {
     const [country, setCountry] = useState("");
     const [conversionRate, setConversionRate] = useState(1);
     const [selectedCountries, setSelectedCountries] = useState([]);
-    const [localCountries, setLocalCountries] = useState([])
-
+    const [localCountries, setLocalCountries] = useState([]);
+    const [nation, setNation] = useState("");
+    const [initialCountries, setInitialCountries] = useState(['AUD', 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']);
 
     const fetchCurrency = async (country) => {
         let url = `https://freecurrencyapi.net/api/v2/latest?base_currency=${country}&apikey=${process.env.REACT_APP_FREECURRAPI}`;
         let currencyFetch = await fetch(url);
         let response = await currencyFetch.json();
         console.log('currency', response.data);
+        setSelectedCountries([]);
 
-        setSelectedCountries([
-            {
-                presentCountry: 'AUD',
-                currencyResult: parseFloat(response.data.AUD).toFixed(2) * parseFloat(conversionRate)
-            },
-            { 
-                presentCountry: 'BDT',
-                currencyResult: parseFloat(response.data.BDT).toFixed(2) * parseFloat(conversionRate) 
-            },
-            {
-                presentCountry: 'BIF',
-                currencyResult: parseFloat(response.data.BIF).toFixed(2) * parseFloat(conversionRate) 
-            },
-            {
-                presentCountry: 'ETB',
-                currencyResult: parseFloat(response.data.ETB).toFixed(2) * parseFloat(conversionRate) 
-            },
-            {
-                presentCountry: 'ILS',
-                currencyResult: parseFloat(response.data.ILS).toFixed(2) * parseFloat(conversionRate) 
-            },
-            {
-                presentCountry: 'MDL',
-                currencyResult: parseFloat(response.data.MDL).toFixed(2) * parseFloat(conversionRate) 
-            },
-        ]);
+
+        initialCountries.map((elem) => {
+            return setSelectedCountries((prev) => {
+                console.log(elem);
+                return [...prev, {
+                    presentCountry: elem,
+                    currencyResult: parseFloat(response.data[elem]).toFixed(2) * parseFloat(conversionRate)    
+                }];
+            })
+        })
+
         setCurrency(response.data);
         return response.data;
     }
@@ -104,8 +91,13 @@ export const CurrencySearch = () => {
     }, [country, conversionRate])
 
     const addCurrency = (e) => {
-
+        setInitialCountries((prev) => {
+            return [...prev, nation];
+        });
+        setNation('');
+        fetchCurrency(country);
     }
+
     return (
         <div className="page-container">
             <h1 style={{ color: "white" }} >Currency Search</h1>
@@ -146,7 +138,11 @@ export const CurrencySearch = () => {
                         )
                     })}
 
-                    <select>
+                    <button onClick={addCurrency}>+ Add Currency</button>
+
+                    <select onChange={(e) => { return(
+                        setNation(e.target.value)
+                    )}} style={{marginBottom: "20px" }} >
                         {nationList.map((ele) => {
                             return (
                                 <option value={ele.country}>{ele.country}</option>
