@@ -3,23 +3,6 @@ import { Country } from './Country';
 import './CurrencySearch.css';
 import { currencyList } from '../utils/currencyList';
 import { nationList } from '../utils/countryList';
-// import aud from '../flags/aud.png';
-// import bdt from '../flags/bdt.png';
-// import bif from '../flags/bif.png';
-// import etb from '../flags/etb.png';
-// import ils from '../flags/ils.png';
-// import mdl from '../flags/mdl.png';
-
-// const nationArray = []
-// currencyList.map((currency) => {
-//     return nationArray.push(
-//         {
-//             countryImg: currency.toLowerCase(),
-//             country: currency
-//         }
-//     )
-// })
-// console.log(nationArray);
 
 const countryArray = [
     {
@@ -111,6 +94,11 @@ export const CurrencySearch = () => {
     }, [country, conversionRate, initialCountries])
 
     const addCurrency = (e) => {
+        // Returns nothing if nation is added already
+        if(nation === ""){
+            return false;
+        }
+
         setInitialCountries((prev) => {
             // [...prev] = ["AUE", 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']
            // prev = ['AUD', 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']
@@ -123,8 +111,9 @@ export const CurrencySearch = () => {
 
     const removeNations = (e) => {
         // grabbing original countries
+        console.log("Nations", e.target.name);
         setInitialCountries((prev) => {
-            return prev.filter((ele) => ele !== e.target.name) 
+            return prev.filter((ele) => ele !== e.target.name); 
         })
     }
 
@@ -158,13 +147,14 @@ export const CurrencySearch = () => {
                 </div>
 
                 <div className="currency-search">
-                    {selectedCountries.map((elem) => {
+                    {selectedCountries.map((elem, idx) => {
                         return (
                             <Country
                                 country={elem.presentCountry}
                                 countrycode={elem.presentCountry.toLowerCase()}
                                 currencyValue={elem.currencyResult}
                                 remove={removeNations}
+                                key={idx}
                             />
                         )
                     })}
@@ -174,9 +164,9 @@ export const CurrencySearch = () => {
                     <select onChange={(e) => { return(
                         setNation(e.target.value)
                     )}} style={{marginBottom: "20px" }} >
-                        {nationList.map((ele) => {
+                        {nationList.map((ele, idx) => {
                             return (
-                                <option value={ele.country}>{ele.country}</option>
+                                <option key={idx} value={ele.country}>{ele.country}</option>
                             )
                         })}
                     </select>
