@@ -111,12 +111,13 @@ export const CurrencySearch = () => {
 
     const removeNations = (e) => {
         // grabbing original countries
-        console.log("Nations", e.target.name);
+        console.log("Test Rocket", e.target.parentElement.name);
         setInitialCountries((prev) => {
-            return prev.filter((ele) => ele !== e.target.name); 
+            return prev.filter((ele) => ele !== e.target.parentElement.name); 
         })
     }
 
+    /* JSX Code */
     return (
         <div className="page-container">
             <h1 style={{ color: "white" }} >Currency Search</h1>
@@ -148,15 +149,34 @@ export const CurrencySearch = () => {
 
                 <div className="currency-search">
                     {selectedCountries.map((elem, idx) => {
-                        return (
-                            <Country
-                                country={elem.presentCountry}
-                                countrycode={elem.presentCountry.toLowerCase()}
-                                currencyValue={elem.currencyResult}
-                                remove={removeNations}
-                                key={idx}
-                            />
-                        )
+                        // to handle no country flag
+                        let noFlag = elem.presentCountry.toLowerCase();
+
+                        try{
+                            let noFlag1 = require(`../flags/${noFlag}.png`).default;
+                            return (
+                                <Country
+                                    country={elem.presentCountry}
+                                    countrycode={elem.presentCountry.toLowerCase()}
+                                    currencyValue={elem.currencyResult}
+                                    remove={removeNations}
+                                    key={idx}
+                                />
+                            )
+                        }
+                        catch{
+                            noFlag = "nf";
+                            return (
+                                <Country
+                                    country={elem.presentCountry}
+                                    countrycode={noFlag}
+                                    currencyValue={elem.currencyResult}
+                                    remove={removeNations}
+                                    key={idx}
+                                />
+                            )
+                        }
+
                     })}
 
                     <button onClick={addCurrency}>+ Add Currency</button>

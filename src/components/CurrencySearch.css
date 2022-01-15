@@ -45,3 +45,17 @@
     font-size: 20px;
     padding-right: 20px;
 }
+
+/**/
+@media screen and (max-width: 786px){
+    .currency-container{
+        width: 70vw;
+        margin: 0 auto;
+        background-color: #0487FF;
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        justify-content: space-around;
+        border: 1px solid white;
+    }
+}

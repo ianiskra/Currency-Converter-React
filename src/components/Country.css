@@ -29,3 +29,14 @@
     margin-bottom: 15px;
     margin-right: 10px;
 }
+
+@media screen and (max-width: 786px){
+    .countries{
+        width: 350px;
+        display: flex;
+        justify-content: space-between;
+        background-color: rgb(114, 114, 114);
+        margin-bottom: 5px;
+        padding-top: 15px;
+    }
+}

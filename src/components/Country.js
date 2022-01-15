@@ -11,7 +11,7 @@ export const Country = ({ country, countrycode, currencyValue, remove }) => {
 
             <span>{country} {currencyValue != null ? currencyValue : 0} </span>
             <button className="remove-country" name={country} onClick={remove}>
-            Remove</button>
+                <i className="fas fa-trash" style={{ fontSize: "1.5em", color: "white" }}></i></button>
         </div>
     )
 }
