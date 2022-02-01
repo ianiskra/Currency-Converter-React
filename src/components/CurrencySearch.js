@@ -3,6 +3,7 @@ import { Country } from './Country';
 import './CurrencySearch.css';
 import { currencyList } from '../utils/currencyList';
 import { nationList } from '../utils/countryList';
+import CurrencyChart from './CurrencyChart';
 
 const countryArray = [
     {
@@ -146,7 +147,7 @@ export const CurrencySearch = () => {
                         })}
                     </select>
                 </div>
-
+                <CurrencyChart />
                 <div className="currency-search">
                     {selectedCountries.map((elem, idx) => {
                         // to handle no country flag
@@ -191,7 +192,7 @@ export const CurrencySearch = () => {
                         })}
                     </select>
                 </div>
-
+                
             </div>
         </div>
     )

@@ -27,20 +27,37 @@ export default function CurrencyChart() {
 
     const [dateLabels, setDateLabels] = useState(['2021-04-01', '2021-05-01', '2021-06-01', '2021-07-01', '2021-08-01', '2021-09-01', '2021-10-01']);
 
+    const [MDL, setMDL] = useState([]);
+    const [ETB, setETB] = useState([]);
+
     const fetchHistoricalData = (country) => {
-        const url = "https://freecurrencyapi.net/api/v2/historical?date_from=2021-06-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135";
+        const url = "https://freecurrencyapi.net/api/v2/historical?date_from=2021-04-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135";
 
         fetch(url).then((response) => {
             // NOTE: Convert JSON Data to a JS object
             return response.json();
-        })
-        .then((results) => {
-            console.log('results: ', results.data);
-            const keysArr = Object.keys(results.data);
-            console.log('keysArr:', keysArr)
-            // dateLabels.map((date) => {
-            //     if(date == results[date])
-            // })
+        }).then((results) => {
+
+            console.log(results);
+            // map date lables over specified period
+            dateLabels.map((ele) => {
+                
+                let MDLnum = parseFloat(parseFloat(results.data[ele].MDL).toFixed(2) * 1).toFixed(2);
+                let ETBnum = parseFloat(parseFloat(results.data[ele].ETB).toFixed(2) * 1).toFixed(2);
+
+                console.log(MDLnum);
+                
+                setMDL((prev) => {
+                    return [...prev, MDLnum];
+                });
+
+                setETB((prev) => {
+                    return [...prev, ETBnum];
+                });
+
+                return true;
+            })
+
         }).catch((err) => {
             console.log(err);
         })
@@ -67,6 +84,23 @@ export default function CurrencyChart() {
         ],
     };
 
+    const dataCurrency = {
+        // Chart.js Documentation
+        labels: dateLabels,
+        datasets: [
+            {
+                label: 'MDL vs USD ($100)',
+                data: MDL,
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                label: 'ETB vs USD ($100)',
+                data: ETB,
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            }
+        ]
+    };
+
     const options = {
         responsive: true,
         plugins: {
@@ -80,11 +114,23 @@ export default function CurrencyChart() {
         },
     };
 
+    const currencyOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Currency Bar Chart',
+            },
+        },
+    }
+
     return (
         <div style={{ width: "600px", margin: "2rem auto" }}>
-            <Bar options={options} data={data} />;
+            {/* <Bar options={options} data={data} />; */}
+            {MDL.length > 0 && <Bar options={currencyOptions} data={dataCurrency} />}
         </div>
     );
 }
-
-// https://freecurrencyapi.net/api/v2/historical?date_from=2021-06-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135
