@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+// with just export, USE {} otherwise with export default then NO {}
+import React, { useState, useEffect, useContext } from 'react';
+import CurrencyContext from '../utils/context';
 import { Country } from './Country';
 import './CurrencySearch.css';
 import { currencyList } from '../utils/currencyList';
@@ -28,7 +30,7 @@ export const CurrencySearch = () => {
     const [selectedCountries, setSelectedCountries] = useState([]);
     const [localCountries, setLocalCountries] = useState([]);
     const [nation, setNation] = useState('USD');
-    const [initialCountries, setInitialCountries] = useState(['AUD', 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']);
+    const [initialCountries, setInitialCountries, currentCountry, setCurrentCountry] = useContext(CurrencyContext);
 
     const displayedNations = (currencyResponse) => {
 
@@ -147,7 +149,26 @@ export const CurrencySearch = () => {
                         })}
                     </select>
                 </div>
-                <CurrencyChart />
+                <div id="currency-chart">
+                    <label>
+                        <select onChange={(evt) => {
+                            setCurrentCountry(evt.target.value);
+                        }}>
+                            {
+                                initialCountries != null && 
+                                initialCountries.map((x, idx) => {
+                                    return(
+                                        // Allow info to enclosed with tag
+                                        <React.Fragment key={idx}>
+                                            <option value={x}>{x}</option>
+                                        </React.Fragment>
+                                    )
+                                })
+                            }
+                        </select>
+                    </label>
+                    <CurrencyChart />
+                </div>
                 <div className="currency-search">
                     {selectedCountries.map((elem, idx) => {
                         // to handle no country flag

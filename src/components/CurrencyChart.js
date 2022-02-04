@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import CurrencyContext from '../utils/context';
+import styles from './CurrencyChart.module.css';
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -29,6 +32,8 @@ export default function CurrencyChart() {
 
     const [MDL, setMDL] = useState([]);
     const [ETB, setETB] = useState([]);
+    const [presentNation, setPresentNation] = useState();
+    const [initialCountries, setInitialCountries, currentCountry, setCurrentCountry] = useContext(CurrencyContext);
 
     const fetchHistoricalData = (country) => {
         const url = "https://freecurrencyapi.net/api/v2/historical?date_from=2021-04-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135";
@@ -38,12 +43,14 @@ export default function CurrencyChart() {
             return response.json();
         }).then((results) => {
 
-            console.log(results);
+            // console.log(results);
+            setPresentNation([]);
             // map date lables over specified period
             dateLabels.map((ele) => {
                 
                 let MDLnum = parseFloat(parseFloat(results.data[ele].MDL).toFixed(2) * 1).toFixed(2);
                 let ETBnum = parseFloat(parseFloat(results.data[ele].ETB).toFixed(2) * 1).toFixed(2);
+                let presCountry = parseFloat(parseFloat(results.data[ele][currentCountry]).toFixed(2) * 1).toFixed(2);
 
                 console.log(MDLnum);
                 
@@ -53,6 +60,10 @@ export default function CurrencyChart() {
 
                 setETB((prev) => {
                     return [...prev, ETBnum];
+                });
+
+                setPresentNation((prev) => {
+                    return [...prev, presCountry];
                 });
 
                 return true;
@@ -97,6 +108,11 @@ export default function CurrencyChart() {
                 label: 'ETB vs USD ($100)',
                 data: ETB,
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+            {
+                label: `${currentCountry} vs USD ($100)`,
+                data: presentNation,
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
             }
         ]
     };
@@ -128,7 +144,7 @@ export default function CurrencyChart() {
     }
 
     return (
-        <div style={{ width: "600px", margin: "2rem auto" }}>
+        <div className={styles.container}>
             {/* <Bar options={options} data={data} />; */}
             {MDL.length > 0 && <Bar options={currencyOptions} data={dataCurrency} />}
         </div>

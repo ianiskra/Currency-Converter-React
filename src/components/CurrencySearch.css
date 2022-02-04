@@ -8,6 +8,10 @@
     border-radius: 5px;
 }
 
+#currency-chart{
+    order: 3;
+}
+
 /* Classes */
 .currency-container{
     width: 70vw;
@@ -16,6 +20,7 @@
     display: flex;
     gap: 10px;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
     border: 1px solid white;
 }
