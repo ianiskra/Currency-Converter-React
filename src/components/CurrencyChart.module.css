@@ -3,3 +3,13 @@
     margin: 2rem auto;
     background: white;  
  }
+
+ /**/
+@media screen and (max-width: 786px){
+    
+    .container{ 
+        width: 550px;
+        margin: 2rem auto;
+        background: white;  
+     }
+}

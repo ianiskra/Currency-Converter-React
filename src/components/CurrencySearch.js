@@ -42,14 +42,14 @@ export const CurrencySearch = () => {
                 console.log(elem);
 
                 // Make sure conversion country matches the default coutries 
-                if(elem === country) {
+                if (elem === country) {
                     singleNation = {
                         presentCountry: elem,
                         currencyResult: 1 * parseFloat(conversionRate).toFixed(2)
-                    } 
+                    }
                 }
                 //
-                else{
+                else {
                     singleNation = {
                         presentCountry: elem,
                         currencyResult: parseFloat(currencyResponse.data[elem]).toFixed(2) * parseFloat(conversionRate).toFixed(2)
@@ -98,13 +98,13 @@ export const CurrencySearch = () => {
 
     const addCurrency = (e) => {
         // Returns nothing if nation is added already
-        if(nation === ""){
+        if (nation === "") {
             return false;
         }
 
         setInitialCountries((prev) => {
             // [...prev] = ["AUE", 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']
-           // prev = ['AUD', 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']
+            // prev = ['AUD', 'BDT', 'BIF', 'ETB', 'ILS', 'MDL']
             return [...prev, nation];
         });
         // Based on a Default Country Value
@@ -116,65 +116,74 @@ export const CurrencySearch = () => {
         // grabbing original countries
         console.log("Test Rocket", e.target.parentElement.name);
         setInitialCountries((prev) => {
-            return prev.filter((ele) => ele !== e.target.parentElement.name); 
+            return prev.filter((ele) => ele !== e.target.parentElement.name);
         })
     }
 
     /* JSX Code */
     return (
         <div className="page-container">
-            <h1 style={{ color: "white" }} >Currency Search</h1>
+            <div className="h1-media">
+                <h1 style={{ color: "white" }} >Currency Search</h1>
+            </div>
             <div className="currency-container">
                 {/* {Object.keys(currency).length > 0 ? currency.AFN : "No Data"} */}
 
                 {/* Dropdown list of currencies */}
                 <div id="conversion" className="currency-search">
-                    <div>
+                    <div className="shift-rate">
                         <h2>Conversion Rate</h2>
                         <input id="conversion-box" type="text" value={conversionRate} onChange={(e) => {
                             setConversionRate(e.target.value);
                         }} />
                     </div>
-                    <div>
+
+                    <div className="shift-rate">
                         <h2>Select A Country</h2>
-                    </div>
-                    <select onChange={(e) => {
-                        setCountry(e.target.value);
-                    }}>
-                        {/* Mapping Country based on selection */}
-                        {currencyList.map((country, idx) => {
-                            return (
-                                <option key={idx} value={country}>{country}</option>
-                            );
-                        })}
-                    </select>
-                </div>
-                <div id="currency-chart">
-                    <label>
-                        <select onChange={(evt) => {
-                            setCurrentCountry(evt.target.value);
+                        <select onChange={(e) => {
+                            setCountry(e.target.value);
                         }}>
-                            {
-                                initialCountries != null && 
-                                initialCountries.map((x, idx) => {
-                                    return(
-                                        // Allow info to enclosed with tag
-                                        <React.Fragment key={idx}>
-                                            <option value={x}>{x}</option>
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
+                            {/* Mapping Country based on selection */}
+                            {currencyList.map((country, idx) => {
+                                return (
+                                    <option key={idx} value={country}>{country}</option>
+                                );
+                            })}
                         </select>
-                    </label>
-                    <CurrencyChart />
+                    </div>
+
+                    <div id="currency-chart">
+                        <div>
+                            <label>
+                                <select onChange={(evt) => {
+                                    setCurrentCountry(evt.target.value);
+                                }}>
+                                    {
+                                        initialCountries != null &&
+                                        initialCountries.map((x, idx) => {
+                                            return (
+                                                // Allow info to enclosed with tag
+                                                <React.Fragment key={idx}>
+                                                    <option value={x}>{x}</option>
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    }
+                                </select>
+                            </label>
+                            <CurrencyChart />
+                        </div>
+                    </div>
+
                 </div>
-                <div className="currency-search">
+
+
+                <div id="default-currency" className="currency-search">
                     {selectedCountries.map((elem, idx) => {
                         // to handle no country flag
                         let noFlag = elem.presentCountry.toLowerCase();
 
-                        try{
+                        try {
                             let noFlag1 = require(`../flags/${noFlag}.png`).default;
                             return (
                                 <Country
@@ -186,7 +195,7 @@ export const CurrencySearch = () => {
                                 />
                             )
                         }
-                        catch{
+                        catch {
                             noFlag = "nf";
                             return (
                                 <Country
@@ -203,9 +212,11 @@ export const CurrencySearch = () => {
 
                     <button onClick={addCurrency}>+ Add Currency</button>
 
-                    <select onChange={(e) => { return(
-                        setNation(e.target.value)
-                    )}} style={{marginBottom: "20px" }} >
+                    <select onChange={(e) => {
+                        return (
+                            setNation(e.target.value)
+                        )
+                    }} style={{ marginBottom: "20px" }} >
                         {nationList.map((ele, idx) => {
                             return (
                                 <option key={idx} value={ele.country}>{ele.country}</option>
@@ -213,7 +224,7 @@ export const CurrencySearch = () => {
                         })}
                     </select>
                 </div>
-                
+
             </div>
         </div>
     )
