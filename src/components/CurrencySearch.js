@@ -62,7 +62,7 @@ export const CurrencySearch = () => {
     }
 
     const fetchCurrency = async (country) => {
-        let url = `https://freecurrencyapi.net/api/v2/latest?base_currency=${country}&apikey=${process.env.REACT_APP_FREECURRAPI}`;
+        let url = `https://currencyapi.com/api/v2/latest?base_currency=${country}&apikey=${process.env.REACT_APP_FREECURRAPI}`;
         let currencyFetch = await fetch(url);
         let response = await currencyFetch.json();
         console.log('currency', response.data);

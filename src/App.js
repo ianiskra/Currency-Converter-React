@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 import { CurrencySearch } from './components/CurrencySearch';
-import CurrencyChart from './components/CurrencyChart';
 import CurrencyContext from './utils/context';
 
 function App() {

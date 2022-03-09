@@ -36,7 +36,7 @@ export default function CurrencyChart() {
     const [initialCountries, setInitialCountries, currentCountry, setCurrentCountry] = useContext(CurrencyContext);
 
     const fetchHistoricalData = (country) => {
-        const url = "https://freecurrencyapi.net/api/v2/historical?date_from=2021-04-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135";
+        const url = "https://currencyapi.com/api/v2/historical?date_from=2021-04-01&date_to=2022-01-24&apikey=6ea109e0-57d1-11ec-a47a-8b6c96d68135";
 
         fetch(url).then((response) => {
             // NOTE: Convert JSON Data to a JS object
